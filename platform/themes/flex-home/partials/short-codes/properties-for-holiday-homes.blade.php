@@ -8,7 +8,8 @@
                 @endif
             </div>
             <div class="col-4 text-right">
-                        <a href="http://frostyfuels.com/properties?type=holday_homes" class=" btn btn-primary">View More</a>
+                        <!-- <a href="http://frostyfuels.com/properties?type=holday_homes" class=" btn btn-primary">View More</a> -->
+                        <a href="<?= env('APP_URL'); ?>properties?type=holday_homes" class="btn btn-primary">View More</a>
                     </div>
         </div>
         <div class="projecthome mb-2">

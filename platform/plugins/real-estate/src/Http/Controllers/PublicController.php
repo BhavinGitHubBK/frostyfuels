@@ -33,6 +33,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Mimey\MimeTypes;
+use Botble\RealEstate\Repositories\Interfaces\BidInterface;
+use Botble\RealEstate\Http\Requests\SendBidRequest;
 
 class PublicController extends Controller
 {
@@ -91,6 +93,70 @@ class PublicController extends Controller
             return $response
                 ->setError()
                 ->setMessage(trans('plugins/real-estate::consult.email.failed'));
+        }
+    }
+
+    public function postSendBid(
+        SendBidRequest $request,
+        BaseHttpResponse $response,
+        BidInterface $bidRepository,
+        PropertyInterface $propertyRepository,
+        ProjectInterface $projectRepository
+    ) {
+        try {
+            
+            $sendTo = null;
+            $link = null;
+            $subject = null;
+
+            if ($request->input('type') == 'project') {
+                // dd("IF PROJECT");
+                $request->merge(['project_id' => $request->input('data_id')]);
+                $project = $projectRepository->findById($request->input('data_id'));
+                if ($project) {
+                    $link = $project->url;
+                    $subject = $project->name;
+                }
+            } else {
+                // dd("ELSE PROPERTY");
+                $request->merge(['property_id' => $request->input('data_id')]);
+                $property = $propertyRepository->findById($request->input('data_id'), ['author']);
+                if ($property) {
+                    $link = $property->url;
+                    $subject = $property->name;
+
+                    if ($property->author->email) {
+                        $sendTo = $property->author->email;
+                    }
+                }
+            }
+
+            $ipAddress = $request->ip();
+            // dd($request->all());
+            // dd("ASAA");
+            $bid = $bidRepository->createOrUpdate(array_merge($request->input(), ['ip_address' => $ipAddress]));
+            // dd('KLKLKL');
+            // dd($bid);
+
+            EmailHandler::setModule(REAL_ESTATE_MODULE_SCREEN_NAME)
+                ->setVariableValues([
+                    'bid_name' => $bid->name,
+                    'bid_email' => $bid->email,
+                    'bid_phone' => $bid->phone,
+                    'bid_content' => $bid->content,
+                    'bid_link' => $link,
+                    'bid_subject' => $subject,
+                    'bid_ip_address' => $bid->ip_address,
+                ])
+                ->sendUsingTemplate('bid-notice', $sendTo);
+
+            return $response->setMessage(trans('plugins/real-estate::bid.email.success'));
+        } catch (Exception $exception) {
+            info($exception->getMessage());
+
+            return $response
+                ->setError()
+                ->setMessage(trans('plugins/real-estate::bid.email.failed'));
         }
     }
 

@@ -318,6 +318,9 @@ Route::group(['namespace' => 'Botble\RealEstate\Http\Controllers', 'middleware' 
             Route::post('send-consult', 'PublicController@postSendConsult')
                 ->name('public.send.consult');
 
+            Route::post('send-bid', 'PublicController@postSendBid')
+                ->name('send.bid.details');
+
             Route::get('currency/switch/{code?}', [
                 'as' => 'public.change-currency',
                 'uses' => 'PublicController@changeCurrency',

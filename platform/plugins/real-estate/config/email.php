@@ -101,5 +101,20 @@ return [
                 'package_number_of_listings' => 'Number of package listings',
             ],
         ],
+        'bid-notice' => [
+            'title' => 'New Bid',
+            'description' => 'Send to the agent email / admin email when someone contact via bid form',
+            'subject' => 'New bid',
+            'can_off' => true,
+            'variables' => [
+                'bid_name' => 'Name',
+                'bid_phone' => 'Phone',
+                'bid_email' => 'Email',
+                'bid_content' => 'Content',
+                'bid_link' => 'Link',
+                'bid_subject' => 'Subject',
+                'bid_ip_address' => 'IP address',
+            ],
+        ],
     ],
 ];

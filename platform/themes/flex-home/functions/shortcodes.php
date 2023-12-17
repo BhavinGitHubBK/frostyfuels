@@ -160,6 +160,31 @@ app()->booted(function () {
             return Theme::partial('short-codes.properties-for-sale-admin-config', compact('attributes', 'content'));
         });
 
+        add_shortcode('properties-for-bid', __('Properties for bid'), __('Properties for bid'), function ($shortcode) {
+            $conditions = [
+                    're_properties.type' => PropertyTypeEnum::BID,
+                ] + RealEstateHelper::getPropertyDisplayQueryConditions();
+
+            if (($shortcode->featured ?: 1) == 1) {
+                $conditions['re_properties.is_featured'] = true;
+            }
+
+            $properties = app(PropertyInterface::class)->getPropertiesByConditions(
+                $conditions,
+                (int)$shortcode->limit ?: 8,
+                RealEstateHelper::getPropertyRelationsQuery()
+            );
+
+            return Theme::partial('short-codes.properties-for-bid', [
+                'title' => $shortcode->title,
+                'subtitle' => $shortcode->subtitle,
+                'properties' => $properties,
+            ]);
+        });
+
+        shortcode()->setAdminConfig('properties-for-bid', function ($attributes, $content) {
+            return Theme::partial('short-codes.properties-for-sale-admin-config', compact('attributes', 'content'));
+        });
 
         add_shortcode('properties-for-resale', __('Properties for Resale'), __('Properties for Resale'), function ($shortcode) {
             $conditions = [

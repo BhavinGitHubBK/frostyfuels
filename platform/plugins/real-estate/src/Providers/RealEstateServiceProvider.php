@@ -73,6 +73,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Botble\RealEstate\Repositories\Interfaces\BidInterface;
+use Botble\RealEstate\Repositories\Eloquent\BidRepository;
+use Botble\RealEstate\Models\BidDetails;
 
 class RealEstateServiceProvider extends ServiceProvider
 {
@@ -138,6 +141,10 @@ class RealEstateServiceProvider extends ServiceProvider
 
         $this->app->singleton(TransactionInterface::class, function () {
             return new TransactionRepository(new Transaction());
+        });
+
+        $this->app->bind(BidInterface::class, function () {
+            return new BidRepository(new BidDetails());
         });
 
         config([

@@ -364,6 +364,9 @@ class PropertyRepository extends RepositoriesAbstract implements PropertyInterfa
             'order_by' => ['created_at' => 'DESC'],
         ];
 
+        // echo "<pre>"; print_r($params); echo "</pre>";
+        // die;
+
         return $this->advancedGet($params);
     }
 }

@@ -1,4 +1,10 @@
 <div class="item" data-lat="{{ $property->latitude }}" data-long="{{ $property->longitude }}">
+<?php
+$statusLabel = $property->status->toHtml();
+if ($property->type == 'bid') {
+    $statusLabel = '<span class="label-success status-label">Biding</span>';
+}
+?>
     <div class="blii">
         <div class="img">
             <img class="thumb"
@@ -13,7 +19,7 @@
                 <span>{{ is_array($property->images) ? count($property->images) : 0 }}</span>
             </div>
         </div>
-        <div class="status">{!! $property->status->toHtml() !!}</div>
+        <div class="status">{!! $statusLabel !!}</div>
         <ul class="item-price-wrap hide-on-list">
             <li class="h-type"><span title="{{ $property->category->name }}">{{ Str::limit($property->category->name, 20) }}</span></li>
             <li class="item-price"><span title="{{ format_price($property->price, $property->currency) }}">{{ format_price($property->price, $property->currency) }}</span></li>

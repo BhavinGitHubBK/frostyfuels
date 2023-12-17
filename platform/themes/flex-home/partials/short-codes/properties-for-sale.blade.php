@@ -10,7 +10,8 @@
                         @endif
                     </div>
                     <div class="col-4 text-right">
-                        <a href="http://frostyfuels.com/properties?type=sale" class="btn btn-primary">View More</a>
+                        <!-- <a href="http://frostyfuels.com/properties?type=sale" class="btn btn-primary">View More</a> -->
+                        <a href="<?= env('APP_URL'); ?>properties?type=sale" class="btn btn-primary">View More</a>
                     </div>
                 </div>
                 <div class="projecthome mb-2">

@@ -141,14 +141,18 @@ class DashboardMenu
         $routePrefix = '/' . $prefix;
 
         if (setting('cache_admin_menu_enable', true) && Auth::check()) {
+            // dd("IF");
             $cacheKey = md5('cache-dashboard-menu-' . Auth::id());
             if (! cache()->has($cacheKey)) {
+                // dd("IF 2");
                 $links = $this->links;
                 cache()->forever($cacheKey, $links);
             } else {
+                // dd("ELSE");
                 $links = cache()->get($cacheKey);
             }
         } else {
+            // dd("ELSE 2");
             $links = $this->links;
         }
 
@@ -159,7 +163,7 @@ class DashboardMenu
         }
 
         $protocol .= BaseHelper::getAdminPrefix();
-
+        // dd($links);
         foreach ($links as $key => &$link) {
             if ($link['permissions'] && ! Auth::user()->hasAnyPermission($link['permissions'])) {
                 Arr::forget($links, $key);

@@ -44,6 +44,7 @@ return [
         'rent' => 'Rent',
         'ressale' => 'Resale',
         'holiday_home' => 'Holiday Home',
+        'bid' => 'Bid',
     ],
     'periods' => [
         'day' => 'Day',

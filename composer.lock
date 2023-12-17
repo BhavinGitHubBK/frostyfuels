@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.293.10",
+            "version": "3.294.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9ae3bfd036190847dd0a5c3cdc4681dbb0994f5a"
+                "reference": "63c720229a9c9cdedff6bac98d6e72be8cc241f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9ae3bfd036190847dd0a5c3cdc4681dbb0994f5a",
-                "reference": "9ae3bfd036190847dd0a5c3cdc4681dbb0994f5a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/63c720229a9c9cdedff6bac98d6e72be8cc241f1",
+                "reference": "63c720229a9c9cdedff6bac98d6e72be8cc241f1",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.293.10"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.294.1"
             },
-            "time": "2023-12-13T19:41:27+00:00"
+            "time": "2023-12-15T19:25:52+00:00"
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -234,7 +234,7 @@
         },
         {
             "name": "botble/api",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/api",
@@ -325,7 +325,7 @@
         },
         {
             "name": "botble/get-started",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/get-started",
@@ -351,7 +351,7 @@
         },
         {
             "name": "botble/installer",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/installer",
@@ -380,7 +380,7 @@
         },
         {
             "name": "botble/menu",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/menu",
@@ -413,7 +413,7 @@
         },
         {
             "name": "botble/optimize",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/optimize",
@@ -445,7 +445,7 @@
         },
         {
             "name": "botble/page",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/page",
@@ -475,7 +475,7 @@
         },
         {
             "name": "botble/platform",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/core",
@@ -578,7 +578,7 @@
         },
         {
             "name": "botble/plugin-management",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/plugin-management",
@@ -607,7 +607,7 @@
         },
         {
             "name": "botble/revision",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/revision",
@@ -636,7 +636,7 @@
         },
         {
             "name": "botble/seo-helper",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/seo-helper",
@@ -669,7 +669,7 @@
         },
         {
             "name": "botble/shortcode",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/shortcode",
@@ -701,7 +701,7 @@
         },
         {
             "name": "botble/sitemap",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/sitemap",
@@ -730,7 +730,7 @@
         },
         {
             "name": "botble/slug",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/slug",
@@ -762,7 +762,7 @@
         },
         {
             "name": "botble/theme",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/theme",
@@ -803,7 +803,7 @@
         },
         {
             "name": "botble/widget",
-            "version": "dev-main",
+            "version": "dev-property-bid-changes",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/widget",
@@ -4280,16 +4280,16 @@
         },
         {
             "name": "maatwebsite/excel",
-            "version": "3.1.50",
+            "version": "3.1.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SpartnerNL/Laravel-Excel.git",
-                "reference": "d79e66391aa306983bb7e234503f5605c3e33348"
+                "reference": "6d3c78ce6645abada32e03b40dc7f3c561878bc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/d79e66391aa306983bb7e234503f5605c3e33348",
-                "reference": "d79e66391aa306983bb7e234503f5605c3e33348",
+                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Excel/zipball/6d3c78ce6645abada32e03b40dc7f3c561878bc3",
+                "reference": "6d3c78ce6645abada32e03b40dc7f3c561878bc3",
                 "shasum": ""
             },
             "require": {
@@ -4344,7 +4344,7 @@
             ],
             "support": {
                 "issues": "https://github.com/SpartnerNL/Laravel-Excel/issues",
-                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/3.1.50"
+                "source": "https://github.com/SpartnerNL/Laravel-Excel/tree/3.1.51"
             },
             "funding": [
                 {
@@ -4356,7 +4356,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-06T11:29:48+00:00"
+            "time": "2023-12-08T12:44:49+00:00"
         },
         {
             "name": "maennchen/zipstream-php",

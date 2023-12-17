@@ -16,6 +16,7 @@ class PropertyTypeEnum extends Enum
     public const RENT = 'rent';
     public const RESSALE = 'ressale';
     public const HOLIDAY_HOME = 'holiday_home';
+    public const BID = 'bid';
 
     public static $langPath = 'plugins/real-estate::property.types';
 
@@ -29,6 +30,8 @@ class PropertyTypeEnum extends Enum
             self::RESSALE => Html::tag('span', self::RENT()->label(), ['class' => 'label-info status-label'])
             ->toHtml(),
             self::HOLIDAY_HOME => Html::tag('span', self::RENT()->label(), ['class' => 'label-info status-label'])
+            ->toHtml(),
+            self::BID => Html::tag('span', self::SALE()->label(), ['class' => 'label-info status-label'])
             ->toHtml(),
             default => null,
         };
