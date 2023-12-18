@@ -91,6 +91,18 @@ Route::group(['namespace' => 'Botble\RealEstate\Http\Controllers', 'middleware' 
             ]);
         });
 
+        Route::group(['prefix' => 'property-bids', 'as' => 'property-bid.'], function () {
+            Route::resource('', 'PropertyBidController')
+                ->parameters(['' => 'property-bid'])
+                ->except(['create', 'store']);
+
+            Route::delete('items/destroy', [
+                'as' => 'deletes',
+                'uses' => 'PropertyBidController@deletes',
+                'permission' => 'property-bid.destroy',
+            ]);
+        });
+
         Route::group(['prefix' => 'categories', 'as' => 'property_category.'], function () {
             Route::resource('', 'CategoryController')
                 ->parameters(['' => 'category']);

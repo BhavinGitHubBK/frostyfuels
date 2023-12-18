@@ -51,6 +51,17 @@ class DashboardServiceProvider extends ServiceProvider
                 'url' => route('dashboard.index'),
                 'permissions' => [],
             ]);
+
+            // Add your new menu item here
+            // DashboardMenu::registerItem([
+            //     'id' => 'cms-core-dashboard',
+            //     'priority' => 0,
+            //     'parent_id' => null,
+            //     'name' => 'core/base::layouts.dashboard',
+            //     'icon' => 'fa fa-home',
+            //     'url' => route('dashboard.index'),
+            //     'permissions' => [],
+            // ]);
         });
     }
 }
