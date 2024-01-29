@@ -42,6 +42,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Botble\RealEstate\Models\AdvertisementPackage;
+use Botble\RealEstate\Models\AdvertisementImage;
+
 
 class PublicAccountController extends Controller
 {
@@ -144,7 +147,7 @@ class PublicAccountController extends Controller
 
     public function getPackages()
     {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
@@ -157,9 +160,147 @@ class PublicAccountController extends Controller
         return view('plugins/real-estate::account.settings.package');
     }
 
+    public function getAdvertisementPackages()
+    {
+        return view('plugins/real-estate::account.settings.getadvertisementpackages');
+    }
+
+    public function getUploadAdvertisementImagesPackages()
+    {
+        // Get all records from the AdvertisementPackage table
+        $advertisementPackages = AdvertisementPackage::all();
+
+        // Pass the data to the view
+        return view('plugins/real-estate::account.settings.uploadadvertisementimages', ['advertisementPackages' => $advertisementPackages]);
+    }
+
+    // public function storeAdvertisementImages(Request $request)
+    // {
+    //     $uploadedImages = $request->file('images');
+
+    //     foreach ($uploadedImages as $packageCode => $image) {
+    //         // Check if the directory already exists
+    //         if (!Storage::disk('public')->exists($packageCode)) {
+    //             // If the directory does not exist, create it and set the visibility and permissions
+    //             Storage::disk('public')->makeDirectory($packageCode);
+    //             Storage::disk('public')->setVisibility($packageCode, 'public');
+    //             // Set full permissions for the directory
+    //             // chmod(storage_path('app/public/advertisement_images' . $packageCode), 0777);
+    //         }
+
+    //         try {
+    //             // Change the image name and upload it to the specified directory
+    //             $imageName = $packageCode . '_' . time() . '.' . $image->getClientOriginalExtension();
+    //             $imagePath = $image->storeAs('advertisement_images/' . $packageCode, $imageName);
+    //         } catch (\Exception $e) {
+    //             // Log or print the exception message for debugging
+    //             dd($e->getMessage());
+    //         }
+
+    //         $advertisementImage = new AdvertisementImage();
+    //         $advertisementPackage = AdvertisementPackage::where('advertisement_package_code', $packageCode)->first();
+    //         $advertisementImage->advertisement_package_id = $advertisementPackage->id;
+    //         $advertisementImage->$packageCode = $imagePath; // Assuming 'images' is the storage path
+    //         $advertisementImage->save();
+    //     }
+
+    //     return redirect()->route('public.account.uploadadvertisementimagespackages')->with([
+    //         'message' => 'Record added successfully!',
+    //         'status' => 'success'
+    //     ]);
+    // }
+
+    public function storeAdvertisementImages(Request $request)
+    {
+        $uploadedImages = $request->file('images');
+
+        foreach ($uploadedImages as $packageCode => $image) {
+            if (strpos($packageCode, 'slider_image') !== false) {
+                // Handle slider_images separately
+                // $sliderImagesFolder = 'slider_image'; // Change this to the desired folder name
+                // echo "<pre>"; print_r($packageCode); echo "</pre>";
+                $this->storeSliderImage($packageCode, $image);
+            } else {
+                // Handle other images
+                // echo "<pre>"; print_r($packageCode); echo "</pre>";
+                $this->storeOtherImage($packageCode, $image);
+            }
+        }
+
+        // die;
+
+        return redirect()->route('public.account.uploadadvertisementimagespackages')->with([
+            'message' => 'Record added successfully!',
+            'status' => 'success'
+        ]);
+    }
+
+    private function storeSliderImage($packageCode, $image)
+    {
+        // Check if the directory already exists
+        if (!Storage::disk('public')->exists($packageCode)) {
+            Storage::disk('public')->makeDirectory($packageCode);
+            Storage::disk('public')->setVisibility($packageCode, 'public');
+        }
+
+        try {
+            // Change the image name and upload it to the specified directory
+            $imageName = $packageCode . '_' . time() . '_' . $image->getClientOriginalName(); // Adjust the naming convention as needed
+            $imagePath = $image->storeAs('advertisement_images/' . $packageCode, $imageName);
+        } catch (\Exception $e) {
+            // Log or print the exception message for debugging
+            dd($e->getMessage());
+        }
+
+        // Save the slider image path in the database or perform any other necessary operations
+        // For example, you might want to associate it with a specific model or record
+        $advertisementImage = new AdvertisementImage();
+        $advertisementPackage = AdvertisementPackage::where('advertisement_package_code', 'slider_image')->first();
+        $advertisementImage->advertisement_package_id = $advertisementPackage->id;
+        $advertisementImage->slider_image = $imagePath;
+        $advertisementImage->save();
+    }
+
+    private function storeOtherImage($packageCode, $image)
+    {
+        // Your existing logic for handling other images
+        // ...
+
+        // Check if the directory already exists
+        if (!Storage::disk('public')->exists($packageCode)) {
+            Storage::disk('public')->makeDirectory($packageCode);
+            Storage::disk('public')->setVisibility($packageCode, 'public');
+        }
+
+        try {
+            // Change the image name and upload it to the specified directory
+            $imageName = $packageCode . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('advertisement_images/' . $packageCode, $imageName);
+        } catch (\Exception $e) {
+            // Log or print the exception message for debugging
+            dd($e->getMessage());
+        }
+
+        // Save the other image path in the database or perform any other necessary operations
+        // For example, you might want to associate it with a specific model or record
+        $advertisementImage = new AdvertisementImage();
+        $advertisementPackage = AdvertisementPackage::where('advertisement_package_code', $packageCode)->first();
+        $advertisementImage->advertisement_package_id = $advertisementPackage->id;
+        $advertisementImage->$packageCode = $imagePath; // Assuming 'images' is the storage path
+        $advertisementImage->save();
+    }
+
+
+
+    public function postUploadAdvertisementImages()
+    {
+        echo "postUploadAdvertisementImages";
+        die;
+    }
+
     public function getTransactions()
     {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
@@ -174,7 +315,7 @@ class PublicAccountController extends Controller
 
     public function ajaxGetPackages(PackageInterface $packageRepository, BaseHttpResponse $response)
     {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
@@ -210,7 +351,7 @@ class PublicAccountController extends Controller
         BaseHttpResponse $response,
         TransactionInterface $transactionRepository
     ) {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
@@ -240,13 +381,13 @@ class PublicAccountController extends Controller
 
     protected function savePayment(Package $package, ?string $chargeId, TransactionInterface $transactionRepository, bool $force = false)
     {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
         $payment = app(PaymentInterface::class)->getFirstBy(['charge_id' => $chargeId]);
 
-        if (! $payment && ! $force) {
+        if (!$payment && !$force) {
             return false;
         }
 
@@ -266,7 +407,7 @@ class PublicAccountController extends Controller
             'payment_id' => $payment ? $payment->id : null,
         ]);
 
-        if (! $package->price) {
+        if (!$package->price) {
             EmailHandler::setModule(REAL_ESTATE_MODULE_SCREEN_NAME)
                 ->setVariableValues([
                     'account_name' => $account->name,
@@ -302,7 +443,7 @@ class PublicAccountController extends Controller
 
     public function getSubscribePackage(int|string $id, PackageInterface $packageRepository)
     {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
@@ -320,7 +461,7 @@ class PublicAccountController extends Controller
         TransactionInterface $transactionRepository,
         BaseHttpResponse $response
     ) {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 
@@ -360,7 +501,7 @@ class PublicAccountController extends Controller
 
         $this->savePayment($package, $request->input('charge_id'), $transactionRepository);
 
-        if (! $request->has('success') || $request->input('success')) {
+        if (!$request->has('success') || $request->input('success')) {
             return $response
                 ->setNextUrl(route('public.account.packages'))
                 ->setMessage(session()->get('success_msg') ?: trans('plugins/real-estate::package.add_credit_success'));
@@ -470,7 +611,7 @@ class PublicAccountController extends Controller
             if ($save->isFinished()) {
                 $result = RvMedia::handleUpload($save->getFile(), 0, auth('account')->user()->upload_folder);
 
-                if (! $result['error']) {
+                if (!$result['error']) {
                     return $response->setData($result['data']);
                 }
 
@@ -495,7 +636,7 @@ class PublicAccountController extends Controller
 
     public function ajaxGetTransactions(TransactionInterface $transactionRepository, BaseHttpResponse $response)
     {
-        if (! RealEstateHelper::isEnabledCreditsSystem()) {
+        if (!RealEstateHelper::isEnabledCreditsSystem()) {
             abort(404);
         }
 

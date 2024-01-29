@@ -549,7 +549,7 @@ var _hoisted_1 = {
   "class": "alert alert-info current-package"
 };
 var _hoisted_2 = {
-  "class": "packages-listing"
+  "class": "packages-listing KJLJ"
 };
 var _hoisted_3 = {
   key: 0,

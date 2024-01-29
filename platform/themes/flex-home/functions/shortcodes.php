@@ -348,7 +348,8 @@ app()->booted(function () {
             __('Search box'),
             __('Search box'),
             function ($shortcode) {
-                return Theme::partial('short-codes.search-box', compact('shortcode'));
+                $advertisementSliderImageData = RealEstateHelper::advertisementSliderImageData();
+                return Theme::partial('short-codes.search-box', compact('shortcode', 'advertisementSliderImageData'));
             }
         );
 
@@ -358,11 +359,19 @@ app()->booted(function () {
 
         add_shortcode('properties-list', __('Properties List'), __('Properties List'), function (Shortcode $shortcode) {
             $properties = RealEstateHelper::getPropertiesFilter((int)$shortcode->per_page ?: 12);
+            $advertisementNewSaleImageData = RealEstateHelper::advertisementNewSaleImageData();
+            $advertisementSecondaryImageData = RealEstateHelper::advertisementSecondaryImageData();
+            $advertisementLeasingImageData = RealEstateHelper::advertisementLeasingImageData();
+            $advertisementHolidayHomesImageData = RealEstateHelper::advertisementHolidayHomesImageData();
 
             return Theme::partial('short-codes.properties-list', [
                 'title' => $shortcode->title,
                 'description' => $shortcode->description,
                 'properties' => $properties,
+                'advertisementNewSaleImageData' => $advertisementNewSaleImageData,
+                'advertisementSecondaryImageData' => $advertisementSecondaryImageData,
+                'advertisementLeasingImageData' => $advertisementLeasingImageData,
+                'advertisementHolidayHomesImageData' => $advertisementHolidayHomesImageData,
             ]);
         });
 
@@ -372,11 +381,13 @@ app()->booted(function () {
 
         add_shortcode('projects-list', __('Projects List'), __('Projects List'), function (Shortcode $shortcode) {
             $projects = RealEstateHelper::getProjectsFilter((int)$shortcode->per_page ?: 12);
+            $advertisementNewProjectImageData = RealEstateHelper::advertisementNewProjectImageData();
 
             return Theme::partial('short-codes.projects-list', [
                 'title' => $shortcode->title,
                 'description' => $shortcode->description,
                 'projects' => $projects,
+                'advertisementNewProjectImageData' => $advertisementNewProjectImageData,
             ]);
         });
 

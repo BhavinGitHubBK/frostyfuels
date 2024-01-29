@@ -127,7 +127,7 @@ Route::group(['namespace' => 'Botble\RealEstate\Http\Controllers', 'middleware' 
             Route::resource('', 'AccountController')
                 ->parameters(['' => 'account']);
 
-    
+
             Route::delete('items/destroy', [
                 'as' => 'deletes',
                 'uses' => 'AccountController@deletes',
@@ -166,6 +166,26 @@ Route::group(['namespace' => 'Botble\RealEstate\Http\Controllers', 'middleware' 
                 'as' => 'deletes',
                 'uses' => 'PackageController@deletes',
                 'permission' => 'package.destroy',
+            ]);
+        });
+
+        Route::group(['prefix' => 'advertisement-packages', 'as' => 'advertisement-package.'], function () {
+            Route::resource('', 'AdvertisementPackageController')
+                ->parameters(['' => 'advertisement-package']);
+            Route::delete('items/destroy', [
+                'as' => 'deletes',
+                'uses' => 'AdvertisementPackageController@deletes',
+                'permission' => 'advertisement-package.destroy',
+            ]);
+        });
+
+        Route::group(['prefix' => 'advertisement-images', 'as' => 'advertisement-image.'], function () {
+            Route::resource('', 'AdvertisementImageController')
+                ->parameters(['' => 'advertisement-image']);
+            Route::delete('items/destroy', [
+                'as' => 'deletes',
+                'uses' => 'AdvertisementImageController@deletes',
+                'permission' => 'advertisement-image.destroy',
             ]);
         });
 
@@ -350,10 +370,10 @@ Route::group(['namespace' => 'Botble\RealEstate\Http\Controllers', 'middleware' 
                     Route::post('register', 'RegisterController@register')
                         ->name('register.post');
 
-                        Route::get('register-developer', 'RegisterController@showRegistrationFormDev')
+                    Route::get('register-developer', 'RegisterController@showRegistrationFormDev')
                         ->name('register.developer');
-                        Route::post('register-developer', 'RegisterController@registerDev')
-                        ->name('register-developer.post');    
+                    Route::post('register-developer', 'RegisterController@registerDev')
+                        ->name('register-developer.post');
 
                     Route::get('verify', 'RegisterController@getVerify')
                         ->name('verify');
@@ -443,6 +463,26 @@ Route::group(['namespace' => 'Botble\RealEstate\Http\Controllers', 'middleware' 
                     Route::get('packages', [
                         'as' => 'packages',
                         'uses' => 'PublicAccountController@getPackages',
+                    ]);
+
+                    Route::get('getadvertisementpackages', [
+                        'as' => 'getadvertisementpackages',
+                        'uses' => 'PublicAccountController@getAdvertisementPackages',
+                    ]);
+
+                    Route::get('uploadadvertisementimagespackages', [
+                        'as' => 'uploadadvertisementimagespackages',
+                        'uses' => 'PublicAccountController@getUploadAdvertisementImagesPackages',
+                    ]);
+
+                    Route::post('storeadvertisementimages', [
+                        'as' => 'storeadvertisementimages',
+                        'uses' => 'PublicAccountController@storeAdvertisementImages',
+                    ]);
+
+                    Route::post('uploadadvertisementimages', [
+                        'as' => 'uploadadvertisementimages',
+                        'uses' => 'PublicAccountController@postUploadAdvertisementImages',
                     ]);
 
                     Route::get('transactions', [

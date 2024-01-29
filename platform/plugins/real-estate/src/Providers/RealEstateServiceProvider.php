@@ -76,6 +76,12 @@ use Illuminate\Support\ServiceProvider;
 use Botble\RealEstate\Repositories\Interfaces\BidInterface;
 use Botble\RealEstate\Repositories\Eloquent\BidRepository;
 use Botble\RealEstate\Models\BidDetails;
+use Botble\RealEstate\Repositories\Interfaces\AdvertisementPackageInterface;
+use Botble\RealEstate\Repositories\Eloquent\AdvertisementPackageRepository;
+use Botble\RealEstate\Models\AdvertisementPackage;
+use Botble\RealEstate\Repositories\Interfaces\AdvertisementImageInterface;
+use Botble\RealEstate\Repositories\Eloquent\AdvertisementImageRepository;
+use Botble\RealEstate\Models\AdvertisementImage;
 
 class RealEstateServiceProvider extends ServiceProvider
 {
@@ -137,6 +143,14 @@ class RealEstateServiceProvider extends ServiceProvider
 
         $this->app->bind(PackageInterface::class, function () {
             return new PackageRepository(new Package());
+        });
+
+        $this->app->bind(AdvertisementPackageInterface::class, function () {
+            return new AdvertisementPackageRepository(new AdvertisementPackage());
+        });
+
+        $this->app->bind(AdvertisementImageInterface::class, function () {
+            return new AdvertisementImageRepository(new AdvertisementImage());
         });
 
         $this->app->singleton(TransactionInterface::class, function () {
@@ -318,7 +332,7 @@ class RealEstateServiceProvider extends ServiceProvider
                     'priority' => 8,
                     'parent_id' => 'cms-plugins-real-estate',
                     'name' => 'Project Approval',
-                    'url' =>route('account.alist'),
+                    'url' => route('account.alist'),
                     'permissions' => ['account.index'],
                 ]);
 
@@ -345,6 +359,24 @@ class RealEstateServiceProvider extends ServiceProvider
                         'icon' => 'fas fa-money-check-alt',
                         'url' => route('package.index'),
                         'permissions' => ['package.index'],
+                    ])
+                    ->registerItem([
+                        'id' => 'cms-plugins-advertisement-packages',
+                        'priority' => 24,
+                        'parent_id' => null,
+                        'name' => 'Advertisement Packages', // 'plugins/real-estate::package.name',
+                        'icon' => 'fas fa-money-check-alt',
+                        'url' => route('advertisement-package.index'),
+                        'permissions' => ['advertisement-package.index'],
+                    ])
+                    ->registerItem([
+                        'id' => 'cms-plugins-advertisement-images',
+                        'priority' => 24,
+                        'parent_id' => null,
+                        'name' => 'Advertisement Images', // 'plugins/real-estate::package.name',
+                        'icon' => 'fas fa-money-check-alt',
+                        'url' => route('advertisement-image.index'),
+                        'permissions' => ['advertisement-image.index'],
                     ]);
             }
 
@@ -445,7 +477,7 @@ class RealEstateServiceProvider extends ServiceProvider
                         case Project::class:
                             $options = $request->input('custom_fields', []) ?: [];
 
-                            if (! $options) {
+                            if (!$options) {
                                 return;
                             }
 
@@ -457,7 +489,7 @@ class RealEstateServiceProvider extends ServiceProvider
                                     'ref_lang' => $request->input('ref_lang'),
                                 ]);
 
-                                if (! $value['id']) {
+                                if (!$value['id']) {
                                     continue;
                                 }
 
@@ -478,7 +510,7 @@ class RealEstateServiceProvider extends ServiceProvider
 
                             $customFieldOptions = $request->input('options', []) ?: [];
 
-                            if (! $customFieldOptions) {
+                            if (!$customFieldOptions) {
                                 return;
                             }
 

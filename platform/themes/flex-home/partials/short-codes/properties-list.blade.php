@@ -12,7 +12,48 @@
 @endphp
 
 <section class="main-homes pb-3">
-    <div class="bgheadproject hidden-xs" style="background: url('{{ theme_option('breadcrumb_background') ? RvMedia::url(theme_option('breadcrumb_background')) : Theme::asset()->url('images/banner-du-an.jpg') }}')">
+
+    @php
+        $showImage = false;
+        $imagePath = '';
+
+        if (request()->getQueryString() == 'type=sale') {
+            if (!empty($advertisementNewSaleImageData)) {
+                if ($advertisementNewSaleImageData->status->getValue() == 'published' && strtotime($advertisementNewSaleImageData->approved_at) + ($advertisementNewSaleImageData->number_of_days * 24 * 60 * 60) > time()) {
+                    $showImage = true;
+                    $imagePath = $advertisementNewSaleImageData->new_sale_image;
+                }
+            }
+        } elseif (request()->getQueryString() == 'type=ressale') {
+            if (!empty($advertisementSecondaryImageData)) {
+                if ($advertisementSecondaryImageData->status->getValue() == 'published' && strtotime($advertisementSecondaryImageData->approved_at) + ($advertisementSecondaryImageData->number_of_days * 24 * 60 * 60) > time()) {
+                    $showImage = true;
+                    $imagePath = $advertisementSecondaryImageData->secondary_image;
+                }
+            }
+        } elseif (request()->getQueryString() == 'type=rent') {
+            if (!empty($advertisementLeasingImageData)) {
+                if ($advertisementLeasingImageData->status->getValue() == 'published' && strtotime($advertisementLeasingImageData->approved_at) + ($advertisementLeasingImageData->number_of_days * 24 * 60 * 60) > time()) {
+                    $showImage = true;
+                    $imagePath = $advertisementLeasingImageData->leasing_image;
+                }
+            }
+        } elseif (request()->getQueryString() == 'type=holiday_home') {
+            if (!empty($advertisementHolidayHomesImageData)) {
+                if ($advertisementHolidayHomesImageData->status->getValue() == 'published' && strtotime($advertisementHolidayHomesImageData->approved_at) + ($advertisementHolidayHomesImageData->number_of_days * 24 * 60 * 60) > time()) {
+                    $showImage = true;
+                    $imagePath = $advertisementHolidayHomesImageData->holiday_homes_image;
+                }
+            }
+        }
+    @endphp
+
+    @if ($showImage)
+        <div class="bgheadproject hidden-xs" style="background: url('{{ asset('storage/' . $imagePath) }}')">
+    @else
+        <div class="bgheadproject hidden-xs" style="background: url('{{ theme_option('breadcrumb_background') ? RvMedia::url(theme_option('breadcrumb_background')) : Theme::asset()->url('images/banner-du-an.jpg') }}')">
+    @endif
+    <!-- <div class="bgheadproject hidden-xs" style="background: url('{{ theme_option('breadcrumb_background') ? RvMedia::url(theme_option('breadcrumb_background')) : Theme::asset()->url('images/banner-du-an.jpg') }}')"> -->
         <div class="description">
             <div class="container-fluid w90">
                 <h1 class="text-center">{{ $title ?? __('Discover our properties') }}</h1>

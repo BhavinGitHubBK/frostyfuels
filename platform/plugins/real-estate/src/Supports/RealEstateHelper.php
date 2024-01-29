@@ -14,6 +14,8 @@ use Botble\RealEstate\Repositories\Interfaces\PropertyInterface;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Botble\RealEstate\Models\AdvertisementPackage;
+use Botble\RealEstate\Models\AdvertisementImage;
 
 class RealEstateHelper
 {
@@ -380,5 +382,66 @@ class RealEstateHelper
     public function maxPropertyImagesUploadByAgent(): int
     {
         return (int)setting('real_estate_max_property_images_upload_by_agent', 20);
+    }
+
+    public function advertisementNewProjectImageData() {
+        $advertisementNewProjectImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
+            ->where('advertisement_packages.advertisement_package_code', 'new_project_image')
+            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->first();
+
+        // echo "<pre>"; print_r($advertisementNewProjectImageData); echo "</pre>";
+        return $advertisementNewProjectImageData;
+    }
+
+    public function advertisementNewSaleImageData() {
+        $advertisementNewSaleImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
+            ->where('advertisement_packages.advertisement_package_code', 'new_sale_image')
+            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->first();
+
+        // echo "<pre>"; print_r($advertisementNewSaleImageData); echo "</pre>";
+        return $advertisementNewSaleImageData;
+    }
+
+    public function advertisementSecondaryImageData() {
+        $advertisementSecondaryImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
+            ->where('advertisement_packages.advertisement_package_code', 'secondary_image')
+            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->first();
+
+        // echo "<pre>"; print_r($advertisementSecondaryImageData); echo "</pre>";
+        return $advertisementSecondaryImageData;
+    }
+
+    public function advertisementLeasingImageData() {
+        $advertisementLeasingImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
+            ->where('advertisement_packages.advertisement_package_code', 'leasing_image')
+            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->first();
+
+        // echo "<pre>"; print_r($advertisementLeasingImageData); echo "</pre>";
+        return $advertisementLeasingImageData;
+    }
+
+    public function advertisementHolidayHomesImageData() {
+        $advertisementHolidayHomesImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
+            ->where('advertisement_packages.advertisement_package_code', 'holiday_homes_image')
+            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->first();
+
+        // echo "<pre>"; print_r($advertisementHolidayHomesImageData); echo "</pre>";
+        return $advertisementHolidayHomesImageData;
+    }
+
+    public function advertisementSliderImageData() {
+        $advertisementSliderImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
+            ->where('advertisement_packages.advertisement_package_code', 'slider_image')
+            ->where('advertisement_images.status', 'published') // Add this line
+            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->get();
+
+        // echo "<pre>"; print_r($advertisementSliderImageData); echo "</pre>";
+        return $advertisementSliderImageData;
     }
 }
