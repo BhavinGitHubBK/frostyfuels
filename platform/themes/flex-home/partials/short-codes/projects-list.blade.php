@@ -8,7 +8,7 @@ $categories = get_property_categories([
     @php
         $showImage = false;
         if (!empty($advertisementNewProjectImageData)) {
-            if ($advertisementNewProjectImageData->status->getValue() == 'published' && strtotime($advertisementNewProjectImageData->approved_at) + ($advertisementNewProjectImageData->number_of_days * 24 * 60 * 60) > time())
+            if ($advertisementNewProjectImageData->image_status == 'published' && strtotime($advertisementNewProjectImageData->approved_at) + ($advertisementNewProjectImageData->number_of_days * 24 * 60 * 60) > time())
             {
                 $showImage = true;
             }

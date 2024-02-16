@@ -34,8 +34,9 @@ $defaultSearchType = $shortcode->default_home_search_type ?: theme_option('defau
     .topsearch-imageslider {
         position: absolute;
         z-index: 1;
-        top: 4%;
+        top: 3%;
         left: 25%;
+        width: 50%;
     }
 
     /* .slideshow-container {
@@ -100,112 +101,143 @@ $defaultSearchType = $shortcode->default_home_search_type ?: theme_option('defau
             font-size: 11px
         }
     }
+
+    /* .topsearch-imageslider .topsearch {
+        position: absolute;
+        width: 50%;
+        text-align: center;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        right: 0;
+        z-index: 9;
+        margin: auto;
+    } */
 </style>
 <div class="slideshow-container">
-    @foreach($advertisementSliderImageData as $imageData)
-    @if ($imageData->status->getValue() == 'published' && strtotime($imageData->approved_at) + ($imageData->number_of_days * 24 * 60 * 60) > time())
-    <div class="mySlides slide home_banner">
-        <img src="{{ asset('storage/' . $imageData->slider_image) }}" alt="Slider Image" style="width: 100%; height: 500px">
-    </div>
-    @else
-    <div class="home_banner" style="background-image: url({{ $backgroundImage ? RvMedia::getImageUrl($backgroundImage) : Theme::asset()->url('images/banner.jpg') }})"></div>
-    @break
+@foreach($advertisementSliderImageData as $imageData)
+    <!-- {{ "DDDD: " . $imageData->id . " - " . $imageData->status->getValue() }} -->
+    @if ($imageData->image_status === 'published')
+        @php
+            $approvedDate = \Carbon\Carbon::parse($imageData->approved_at);
+            $numberOfDays = $imageData->number_of_days;
+            $isWithinDays = now()->diffInDays($approvedDate) <= $numberOfDays;
+        @endphp
+        
+        <!--{{ "AAAA: " . $approvedDate }}-->
+        <!--{{ "BBBB: " . $numberOfDays }}-->
+        <!--{{ "CCCC: " . $isWithinDays }}-->
+
+        @if ($isWithinDays)
+        <!-- {{ $imageData }} -->
+            <div class="mySlides slide home_banner">
+                <img src="{{ asset('storage/' . $imageData->slider_image) }}" alt="Slider Image" style="width: 100%; height: 500px">
+            </div>
+        @endif
     @endif
-    @endforeach
+@endforeach
+
+{{-- Display default image if none of the images are within the specified days --}}
+@if (!isset($isWithinDays) || !$isWithinDays)
+    <div class="home_banner" style="background-image: url({{ $backgroundImage ? RvMedia::getImageUrl($backgroundImage) : Theme::asset()->url('images/default_banner.jpg') }})"></div>
+@endif
+
 </div>
-<div class="topsearch topsearch-imageslider">
-    @if (theme_option('home_banner_description'))<h1 class="text-center text-white mb-4 banner-text-description">{{ $shortcode->title ?: theme_option('home_banner_description') }}</h1>@endif
-    <form @if ($enableProjectsSearch && $defaultSearchType=='project' ) action="{{ RealEstateHelper::getProjectsListPageUrl() }}" data-ajax-url="{{ route('public.projects') }}" @else action="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}" @endif method="GET" id="frmhomesearch">
-        <div class="typesearch" id="hometypesearch">
-            @if ($enableProjectsSearch)
-            <a href="javascript:void(0)" @if ($defaultSearchType=='project' ) class="active" @endif rel="project" data-url="{{ RealEstateHelper::getProjectsListPageUrl() }}" data-ajax-url="{{ route('public.projects') }}">{{ __('Projects') }}</a>
-            @endif
-            <a href="javascript:void(0)" rel="sale" @if ($defaultSearchType=='sale' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Sale') }}</a>
-            <a href="javascript:void(0)" rel="rent" @if ($defaultSearchType=='rent' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Rent') }}</a>
-            <a href="javascript:void(0)" rel="ressale" @if ($defaultSearchType=='ressale' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Resale') }}</a>
-            <a href="javascript:void(0)" rel="holiday_home" @if ($defaultSearchType=='holiday_home' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Holiday Home') }}</a>
-
-        </div>
-        <div class="input-group input-group-lg">
-
-            <input type="hidden" name="type" @if ($enableProjectsSearch && $defaultSearchType=='project' ) value="project" @else value="{{ $defaultSearchType ?: 'sale' }}" @endif id="txttypesearch">
-
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="far fa-search"></i></span>
-            </div>
-            <div class="keyword-input">
-                <input type="text" class="form-control" name="k" placeholder="{{ __('Enter keyword...') }}" id="txtkey" autocomplete="off">
-                <div class="spinner-icon">
-                    <i class="fas fa-spin fa-spinner"></i>
-                </div>
-            </div>
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="far fa-location"></i></span>
-            </div>
-            <div class="location-input" data-url="{{ route('public.ajax.cities') }}">
-                <input type="hidden" name="city_id">
-                <input class="select-city-state form-control" name="location" value="{{ BaseHelper::stringify(request()->input('location')) }}" placeholder="{{ __('City, State') }}" autocomplete="off">
-                <div class="spinner-icon">
-                    <i class="fas fa-spin fa-spinner"></i>
-                </div>
-                <div class="suggestion">
-
-                </div>
-            </div>
-            <div class="input-group-append search-button-wrapper">
-                <button class="btn btn-orange" type="submit">{{ __('Search') }}</button>
-            </div>
-
-            <div class="advanced-search">
-                <a href="#" class="advanced-search-toggler">{{ __('Advanced') }} <i class="fas fa-caret-down"></i></a>
-                <div class="advanced-search-content property-advanced-search">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-4 px-md-1">
-                                {!! Theme::partial('real-estate.filters.by-project') !!}
-                            </div>
-                            <div class="col-sm-4 px-md-1">
-                                {!! Theme::partial('real-estate.filters.categories', compact('categories')) !!}
-                            </div>
-                            <div class="col-sm-4 px-md-1">
-                                {!! Theme::partial('real-estate.filters.price') !!}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 col-sm-6 px-md-1">
-                                {!! Theme::partial('real-estate.filters.bedroom') !!}
-                            </div>
-                            <div class="col-md-4 col-sm-6 px-md-1">
-                                {!! Theme::partial('real-estate.filters.bathroom') !!}
-                            </div>
-                            <div class="col-md-4 col-sm-6 pl-md-1">
-                                {!! Theme::partial('real-estate.filters.floor') !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+<div class="topsearch-imageslider">
+    <div class="topsearch">
+        @if (theme_option('home_banner_description'))<h1 class="text-center text-white mb-4 banner-text-description">{{ $shortcode->title ?: theme_option('home_banner_description') }}</h1>@endif
+        <form @if ($enableProjectsSearch && $defaultSearchType=='project' ) action="{{ RealEstateHelper::getProjectsListPageUrl() }}" data-ajax-url="{{ route('public.projects') }}" @else action="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}" @endif method="GET" id="frmhomesearch">
+            <div class="typesearch" id="hometypesearch">
                 @if ($enableProjectsSearch)
-                <div class="advanced-search-content project-advanced-search">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                {!! Theme::partial('real-estate.filters.categories', compact('categories')) !!}
+                <a href="javascript:void(0)" @if ($defaultSearchType=='project' ) class="active" @endif rel="project" data-url="{{ RealEstateHelper::getProjectsListPageUrl() }}" data-ajax-url="{{ route('public.projects') }}">{{ __('Projects') }}</a>
+                @endif
+                <a href="javascript:void(0)" rel="sale" @if ($defaultSearchType=='sale' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Sale') }}</a>
+                <a href="javascript:void(0)" rel="rent" @if ($defaultSearchType=='rent' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Rent') }}</a>
+                <a href="javascript:void(0)" rel="ressale" @if ($defaultSearchType=='ressale' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Resale') }}</a>
+                <a href="javascript:void(0)" rel="holiday_home" @if ($defaultSearchType=='holiday_home' ) class="active" @endif data-url="{{ RealEstateHelper::getPropertiesListPageUrl() }}" data-ajax-url="{{ route('public.properties') }}">{{ __('Holiday Home') }}</a>
+
+            </div>
+            <div class="input-group input-group-lg">
+
+                <input type="hidden" name="type" @if ($enableProjectsSearch && $defaultSearchType=='project' ) value="project" @else value="{{ $defaultSearchType ?: 'sale' }}" @endif id="txttypesearch">
+
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="far fa-search"></i></span>
+                </div>
+                <div class="keyword-input">
+                    <input type="text" class="form-control" name="k" placeholder="{{ __('Enter keyword...') }}" id="txtkey" autocomplete="off">
+                    <div class="spinner-icon">
+                        <i class="fas fa-spin fa-spinner"></i>
+                    </div>
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="far fa-location"></i></span>
+                </div>
+                <div class="location-input" data-url="{{ route('public.ajax.cities') }}">
+                    <input type="hidden" name="city_id">
+                    <input class="select-city-state form-control" name="location" value="{{ BaseHelper::stringify(request()->input('location')) }}" placeholder="{{ __('City, State') }}" autocomplete="off">
+                    <div class="spinner-icon">
+                        <i class="fas fa-spin fa-spinner"></i>
+                    </div>
+                    <div class="suggestion">
+
+                    </div>
+                </div>
+                <div class="input-group-append search-button-wrapper">
+                    <button class="btn btn-orange" type="submit">{{ __('Search') }}</button>
+                </div>
+
+                <div class="advanced-search">
+                    <a href="#" class="advanced-search-toggler">{{ __('Advanced') }} <i class="fas fa-caret-down"></i></a>
+                    <div class="advanced-search-content property-advanced-search">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4 px-md-1">
+                                    {!! Theme::partial('real-estate.filters.by-project') !!}
+                                </div>
+                                <div class="col-sm-4 px-md-1">
+                                    {!! Theme::partial('real-estate.filters.categories', compact('categories')) !!}
+                                </div>
+                                <div class="col-sm-4 px-md-1">
+                                    {!! Theme::partial('real-estate.filters.price') !!}
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                {!! Theme::partial('real-estate.filters.price') !!}
+
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 px-md-1">
+                                    {!! Theme::partial('real-estate.filters.bedroom') !!}
+                                </div>
+                                <div class="col-md-4 col-sm-6 px-md-1">
+                                    {!! Theme::partial('real-estate.filters.bathroom') !!}
+                                </div>
+                                <div class="col-md-4 col-sm-6 pl-md-1">
+                                    {!! Theme::partial('real-estate.filters.floor') !!}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                @endif
-            </div>
-        </div>
-        <div class="listsuggest">
 
-        </div>
-    </form>
+                    @if ($enableProjectsSearch)
+                    <div class="advanced-search-content project-advanced-search">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {!! Theme::partial('real-estate.filters.categories', compact('categories')) !!}
+                                </div>
+                                <div class="col-md-8">
+                                    {!! Theme::partial('real-estate.filters.price') !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            <div class="listsuggest">
+
+            </div>
+        </form>
+    </div>
 </div>
 <br>
 

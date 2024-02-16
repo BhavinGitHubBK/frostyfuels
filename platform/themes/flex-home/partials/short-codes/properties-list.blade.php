@@ -19,28 +19,28 @@
 
         if (request()->getQueryString() == 'type=sale') {
             if (!empty($advertisementNewSaleImageData)) {
-                if ($advertisementNewSaleImageData->status->getValue() == 'published' && strtotime($advertisementNewSaleImageData->approved_at) + ($advertisementNewSaleImageData->number_of_days * 24 * 60 * 60) > time()) {
+                if ($advertisementNewSaleImageData->image_status == 'published' && strtotime($advertisementNewSaleImageData->approved_at) + ($advertisementNewSaleImageData->number_of_days * 24 * 60 * 60) > time()) {
                     $showImage = true;
                     $imagePath = $advertisementNewSaleImageData->new_sale_image;
                 }
             }
         } elseif (request()->getQueryString() == 'type=ressale') {
             if (!empty($advertisementSecondaryImageData)) {
-                if ($advertisementSecondaryImageData->status->getValue() == 'published' && strtotime($advertisementSecondaryImageData->approved_at) + ($advertisementSecondaryImageData->number_of_days * 24 * 60 * 60) > time()) {
+                if ($advertisementSecondaryImageData->image_status == 'published' && strtotime($advertisementSecondaryImageData->approved_at) + ($advertisementSecondaryImageData->number_of_days * 24 * 60 * 60) > time()) {
                     $showImage = true;
                     $imagePath = $advertisementSecondaryImageData->secondary_image;
                 }
             }
         } elseif (request()->getQueryString() == 'type=rent') {
             if (!empty($advertisementLeasingImageData)) {
-                if ($advertisementLeasingImageData->status->getValue() == 'published' && strtotime($advertisementLeasingImageData->approved_at) + ($advertisementLeasingImageData->number_of_days * 24 * 60 * 60) > time()) {
+                if ($advertisementLeasingImageData->image_status == 'published' && strtotime($advertisementLeasingImageData->approved_at) + ($advertisementLeasingImageData->number_of_days * 24 * 60 * 60) > time()) {
                     $showImage = true;
                     $imagePath = $advertisementLeasingImageData->leasing_image;
                 }
             }
         } elseif (request()->getQueryString() == 'type=holiday_home') {
             if (!empty($advertisementHolidayHomesImageData)) {
-                if ($advertisementHolidayHomesImageData->status->getValue() == 'published' && strtotime($advertisementHolidayHomesImageData->approved_at) + ($advertisementHolidayHomesImageData->number_of_days * 24 * 60 * 60) > time()) {
+                if ($advertisementHolidayHomesImageData->image_status == 'published' && strtotime($advertisementHolidayHomesImageData->approved_at) + ($advertisementHolidayHomesImageData->number_of_days * 24 * 60 * 60) > time()) {
                     $showImage = true;
                     $imagePath = $advertisementHolidayHomesImageData->holiday_homes_image;
                 }

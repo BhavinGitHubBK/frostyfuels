@@ -387,7 +387,7 @@ class RealEstateHelper
     public function advertisementNewProjectImageData() {
         $advertisementNewProjectImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
             ->where('advertisement_packages.advertisement_package_code', 'new_project_image')
-            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->select('advertisement_images.status as image_status', 'advertisement_images.*', 'advertisement_packages.*')
             ->first();
 
         // echo "<pre>"; print_r($advertisementNewProjectImageData); echo "</pre>";
@@ -397,7 +397,7 @@ class RealEstateHelper
     public function advertisementNewSaleImageData() {
         $advertisementNewSaleImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
             ->where('advertisement_packages.advertisement_package_code', 'new_sale_image')
-            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->select('advertisement_images.status as image_status', 'advertisement_images.*', 'advertisement_packages.*')
             ->first();
 
         // echo "<pre>"; print_r($advertisementNewSaleImageData); echo "</pre>";
@@ -407,7 +407,7 @@ class RealEstateHelper
     public function advertisementSecondaryImageData() {
         $advertisementSecondaryImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
             ->where('advertisement_packages.advertisement_package_code', 'secondary_image')
-            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->select('advertisement_images.status as image_status', 'advertisement_images.*', 'advertisement_packages.*')
             ->first();
 
         // echo "<pre>"; print_r($advertisementSecondaryImageData); echo "</pre>";
@@ -417,7 +417,7 @@ class RealEstateHelper
     public function advertisementLeasingImageData() {
         $advertisementLeasingImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
             ->where('advertisement_packages.advertisement_package_code', 'leasing_image')
-            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->select('advertisement_images.status as image_status', 'advertisement_images.*', 'advertisement_packages.*')
             ->first();
 
         // echo "<pre>"; print_r($advertisementLeasingImageData); echo "</pre>";
@@ -427,7 +427,7 @@ class RealEstateHelper
     public function advertisementHolidayHomesImageData() {
         $advertisementHolidayHomesImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
             ->where('advertisement_packages.advertisement_package_code', 'holiday_homes_image')
-            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->select('advertisement_images.status as image_status', 'advertisement_images.*', 'advertisement_packages.*')
             ->first();
 
         // echo "<pre>"; print_r($advertisementHolidayHomesImageData); echo "</pre>";
@@ -438,7 +438,7 @@ class RealEstateHelper
         $advertisementSliderImageData = AdvertisementImage::join('advertisement_packages', 'advertisement_images.advertisement_package_id', '=', 'advertisement_packages.id')
             ->where('advertisement_packages.advertisement_package_code', 'slider_image')
             ->where('advertisement_images.status', 'published') // Add this line
-            ->select('advertisement_images.*', 'advertisement_packages.*')
+            ->select('advertisement_images.id as image_id', 'advertisement_images.status as image_status', 'advertisement_images.*', 'advertisement_packages.*')
             ->get();
 
         // echo "<pre>"; print_r($advertisementSliderImageData); echo "</pre>";
