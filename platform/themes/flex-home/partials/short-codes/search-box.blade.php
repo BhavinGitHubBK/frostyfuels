@@ -34,7 +34,7 @@ $defaultSearchType = $shortcode->default_home_search_type ?: theme_option('defau
     .topsearch-imageslider {
         position: absolute;
         z-index: 1;
-        top: 3%;
+        top: 30%;
         left: 25%;
         width: 50%;
     }
@@ -101,6 +101,21 @@ $defaultSearchType = $shortcode->default_home_search_type ?: theme_option('defau
             font-size: 11px
         }
     }
+
+    /* Media query for screens smaller than 768px */
+@media screen and (max-width: 768px) {
+    .topsearch-imageslider {
+        top: 15%;  /* Adjust the left position for smaller screens */
+        width: 86%;
+        left: 4%;
+    }
+
+    .mySlides {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        min-height: 53vh !important;
+    }
+}
 
     /* .topsearch-imageslider .topsearch {
         position: absolute;
